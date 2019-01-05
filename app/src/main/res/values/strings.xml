@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Student Details</string>
+
+    <array name="departments">
+        <item>CSE</item>
+        <item>EEE</item>
+        <item>CIVIL</item>
+        <item>BBA</item>
+        <item>ENGLISH</item>
+    </array>
 </resources>
