@@ -1,6 +1,7 @@
 package com.t3ch.shaj.sqlite_crud_student_details;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
@@ -59,12 +60,38 @@ public class StudentAdapter extends ArrayAdapter<Student> {
         textViewJoiningDate.setText(student.getJoiningDate());
 
         Button buttonEdit = view.findViewById(R.id.buttonEditStudent);
+        Button buttonDelete = view.findViewById(R.id.buttonDeleteStudent);
 
         //adding a clicklistener to button
         buttonEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateStudent(student);
+            }
+        });
+
+        //the delete operation
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+                builder.setTitle("Are you sure?");
+                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String sql = "DELETE FROM students WHERE id = ?";
+                        mDatabase.execSQL(sql, new Integer[]{student.getId()});
+                        reloadStudentsFromDatabase();
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
 
