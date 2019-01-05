@@ -71,30 +71,10 @@ public class StudentAdapter extends ArrayAdapter<Student> {
         });
 
         //the delete operation
-        buttonDelete.setOnClickListener(new View.OnClickListener() {
+        view.findViewById(R.id.buttonDeleteStudent).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
-                builder.setTitle("Are you sure?");
-                builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                        if (mDatabase.deleteStudent(student.getId()))
-                        {
-                            reloadStudentsFromDatabase();
-                        }
-
-                    }
-                });
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
+                deleteStudent(student);
             }
         });
 
@@ -140,13 +120,10 @@ public class StudentAdapter extends ArrayAdapter<Student> {
                 }
 
 
-
                 if (mDatabase.updateStudents(student.getId(), name, dept, Integer.parseInt(roll))) {
                     Toast.makeText(mCtx, "Student Updated", Toast.LENGTH_SHORT).show();
                     reloadStudentsFromDatabase();
-                }
-                else
-                {
+                } else {
                     Toast.makeText(mCtx, "Student Not Updated", Toast.LENGTH_SHORT).show();
                 }
 
@@ -154,6 +131,31 @@ public class StudentAdapter extends ArrayAdapter<Student> {
                 dialog.dismiss();
             }
         });
+    }
+
+    private void deleteStudent(final Student student) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
+        builder.setTitle("Are you sure?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+                //calling the delete method from the database manager instance
+                if (mDatabase.deleteStudent(student.getId()))
+                    reloadStudentsFromDatabase();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void reloadStudentsFromDatabase() {
