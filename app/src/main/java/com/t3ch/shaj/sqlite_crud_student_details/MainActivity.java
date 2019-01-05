@@ -51,14 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createStudentsTable() {
-        mDatabase.execSQL(
-                "CREATE TABLE IF NOT EXISTS students (\n" +
-                        "    id INTEGER NOT NULL CONSTRAINT students_pk PRIMARY KEY AUTOINCREMENT,\n" +
-                        "    name varchar(200) NOT NULL,\n" +
-                        "    department varchar(200) NOT NULL,\n" +
-                        "    joiningdate datetime NOT NULL,\n" +
-                        "    roll double NOT NULL\n" +
-                        ");"
+        mDatabase.execSQL("CREATE TABLE IF NOT EXISTS students (\n" + "    id INTEGER NOT NULL CONSTRAINT students_pk PRIMARY KEY AUTOINCREMENT,\n" + "    name varchar(200) NOT NULL,\n" + "    department varchar(200) NOT NULL,\n" + "    joiningdate datetime NOT NULL,\n" + "    roll double NOT NULL\n" + ");"
         );
     }
 
@@ -91,10 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //validating the inptus
         if (inputsAreCorrect(name, roll)) {
 
-            String insertSQL = "INSERT INTO students \n" +
-                    "(name, department, joiningdate, roll)\n" +
-                    "VALUES \n" +
-                    "(?, ?, ?, ?);";
+            String insertSQL = "INSERT INTO students \n" + "(name, department, joiningdate, roll)\n" + "VALUES \n" + "(?, ?, ?, ?);";
 
 
             mDatabase.execSQL(insertSQL, new String[]{name, dept, joiningDate, roll});
@@ -112,9 +102,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 addStudent();
 
                 break;
-            //case R.id.textViewViewStudents:
+            case R.id.textViewViewStudents:
                 
-                //break;
+                break;
         }
 
     }
