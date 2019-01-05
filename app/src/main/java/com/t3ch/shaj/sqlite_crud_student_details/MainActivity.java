@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void createStudentsTable() {
-        mDatabase.execSQL("CREATE TABLE IF NOT EXISTS students (\n" + "    id INTEGER NOT NULL CONSTRAINT students_pk PRIMARY KEY AUTOINCREMENT,\n" + "    name varchar(200) NOT NULL,\n" + "    department varchar(200) NOT NULL,\n" + "    joiningdate datetime NOT NULL,\n" + "    roll double NOT NULL\n" + ");"
+        mDatabase.execSQL("CREATE TABLE IF NOT EXISTS students (\n" + "    id INTEGER NOT NULL CONSTRAINT students_pk PRIMARY KEY AUTOINCREMENT,\n" + "    name varchar(200) NOT NULL,\n" + "    department varchar(200) NOT NULL,\n" + "    joiningdate datetime NOT NULL,\n" + "    roll INTEGER NOT NULL\n" + ");"
         );
     }
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //getting the current time for joining date
         Calendar cal = Calendar.getInstance();
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
         String joiningDate = sdf.format(cal.getTime());
 
         //validating the inptus

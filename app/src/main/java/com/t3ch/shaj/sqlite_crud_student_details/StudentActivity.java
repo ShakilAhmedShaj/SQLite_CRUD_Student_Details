@@ -13,7 +13,7 @@ public class StudentActivity extends AppCompatActivity {
 
     List<Student> studentList;
     SQLiteDatabase mDatabase;
-    ListView listViewEmployees;
+    ListView listViewStudents;
     StudentAdapter adapter;
 
     @Override
@@ -21,41 +21,41 @@ public class StudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student);
 
-        listViewEmployees = (ListView) findViewById(R.id.listViewStudents);
+        listViewStudents = (ListView) findViewById(R.id.listViewStudents);
         studentList = new ArrayList<>();
 
         //opening the database
         mDatabase = openOrCreateDatabase(MainActivity.DATABASE_NAME, MODE_PRIVATE, null);
 
-        //display the employees in the list
+        //display the students in the list
         showStudentsFromDatabase();
     }
 
     private void showStudentsFromDatabase() {
-        //we used rawQuery(sql, selectionargs) for fetching all the employees
-        Cursor cursorEmployees = mDatabase.rawQuery("SELECT * FROM students", null);
+        //we used rawQuery(sql, selectionargs) for fetching all the students
+        Cursor cursorStudents = mDatabase.rawQuery("SELECT * FROM students", null);
 
         //if the cursor has some data
-        if (cursorEmployees.moveToFirst()) {
+        if (cursorStudents.moveToFirst()) {
             //looping through all the records
             do {
-                //pushing each record in the employee list
+                //pushing each record in the student list
                 studentList.add(new Student(
-                        cursorEmployees.getInt(0),
-                        cursorEmployees.getString(1),
-                        cursorEmployees.getString(2),
-                        cursorEmployees.getString(3),
-                        cursorEmployees.getDouble(4)
+                        cursorStudents.getInt(0),
+                        cursorStudents.getString(1),
+                        cursorStudents.getString(2),
+                        cursorStudents.getString(3),
+                        cursorStudents.getInt(4)
                 ));
-            } while (cursorEmployees.moveToNext());
+            } while (cursorStudents.moveToNext());
         }
         //closing the cursor
-        cursorEmployees.close();
+        cursorStudents.close();
 
         //creating the adapter object
-        adapter = new StudentAdapter(this, R.layout.list_layout_student, studentList);
+        adapter = new StudentAdapter(this, R.layout.list_layout_student, studentList,mDatabase);
 
         //adding the adapter to listview
-        listViewEmployees.setAdapter(adapter);
+        listViewStudents.setAdapter(adapter);
     }
 }

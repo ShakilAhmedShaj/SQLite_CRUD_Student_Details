@@ -6,11 +6,11 @@ package com.t3ch.shaj.sqlite_crud_student_details;
  */
 public class Student {
 
-    int id;
+    int id,roll;
     String name, dept, joiningDate;
-    double roll;
 
-    public Student(int id, String name, String dept, String joiningDate, double roll) {
+
+    public Student(int id, String name, String dept, String joiningDate, int roll) {
         this.id = id;
         this.name = name;
         this.dept = dept;
@@ -34,7 +34,7 @@ public class Student {
         return joiningDate;
     }
 
-    public double getRoll() {
+    public int getRoll() {
         return roll;
     }
 }
