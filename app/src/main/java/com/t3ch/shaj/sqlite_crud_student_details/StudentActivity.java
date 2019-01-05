@@ -12,7 +12,7 @@ import java.util.List;
 public class StudentActivity extends AppCompatActivity {
 
     List<Student> studentList;
-    SQLiteDatabase mDatabase;
+    dbManager mDatabase;
     ListView listViewStudents;
     StudentAdapter adapter;
 
@@ -25,7 +25,7 @@ public class StudentActivity extends AppCompatActivity {
         studentList = new ArrayList<>();
 
         //opening the database
-        mDatabase = openOrCreateDatabase(MainActivity.DATABASE_NAME, MODE_PRIVATE, null);
+        mDatabase = new dbManager(this);
 
         //display the students in the list
         showStudentsFromDatabase();
@@ -33,7 +33,7 @@ public class StudentActivity extends AppCompatActivity {
 
     private void showStudentsFromDatabase() {
         //we used rawQuery(sql, selectionargs) for fetching all the students
-        Cursor cursorStudents = mDatabase.rawQuery("SELECT * FROM students", null);
+        Cursor cursorStudents = mDatabase.getAllStudents();
 
         //if the cursor has some data
         if (cursorStudents.moveToFirst()) {

@@ -28,9 +28,9 @@ public class StudentAdapter extends ArrayAdapter<Student> {
     Context mCtx;
     int listLayoutRes;
     List<Student> studentList;
-    SQLiteDatabase mDatabase;
+    dbManager mDatabase;
 
-    public StudentAdapter(Context mCtx, int listLayoutRes, List<Student> studentList,SQLiteDatabase mDatabase) {
+    public StudentAdapter(Context mCtx, int listLayoutRes, List<Student> studentList, dbManager mDatabase) {
         super(mCtx, listLayoutRes, studentList);
 
         this.mCtx = mCtx;
@@ -79,9 +79,12 @@ public class StudentAdapter extends ArrayAdapter<Student> {
                 builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String sql = "DELETE FROM students WHERE id = ?";
-                        mDatabase.execSQL(sql, new Integer[]{student.getId()});
-                        reloadStudentsFromDatabase();
+
+                        if (mDatabase.deleteStudent(student.getId()))
+                        {
+                            reloadStudentsFromDatabase();
+                        }
+
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -136,15 +139,17 @@ public class StudentAdapter extends ArrayAdapter<Student> {
                     return;
                 }
 
-                String sql = "UPDATE students \n" +
-                        "SET name = ?, \n" +
-                        "department = ?, \n" +
-                        "roll = ? \n" +
-                        "WHERE id = ?;\n";
 
-                mDatabase.execSQL(sql, new String[]{name, dept,roll, String.valueOf(student.getId())});
-                Toast.makeText(mCtx, "Student Updated", Toast.LENGTH_SHORT).show();
-                reloadStudentsFromDatabase();
+
+                if (mDatabase.updateStudents(student.getId(), name, dept, Integer.parseInt(roll))) {
+                    Toast.makeText(mCtx, "Student Updated", Toast.LENGTH_SHORT).show();
+                    reloadStudentsFromDatabase();
+                }
+                else
+                {
+                    Toast.makeText(mCtx, "Student Not Updated", Toast.LENGTH_SHORT).show();
+                }
+
 
                 dialog.dismiss();
             }
@@ -152,7 +157,7 @@ public class StudentAdapter extends ArrayAdapter<Student> {
     }
 
     private void reloadStudentsFromDatabase() {
-        Cursor cursorStudents = mDatabase.rawQuery("SELECT * FROM students", null);
+        Cursor cursorStudents = mDatabase.getAllStudents();
         if (cursorStudents.moveToFirst()) {
             studentList.clear();
             do {

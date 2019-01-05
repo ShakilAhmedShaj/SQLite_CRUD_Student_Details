@@ -18,7 +18,7 @@ import java.util.Calendar;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String DATABASE_NAME = "mystudentdatabase";
-    SQLiteDatabase mDatabase;
+    dbManager mDatabase;
 
     TextView textViewViewStudents;
     EditText editTextName, editTextID;
@@ -30,7 +30,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mDatabase = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        //mDatabase = openOrCreateDatabase(DATABASE_NAME, MODE_PRIVATE, null);
+        mDatabase = new dbManager(this);
 
         textViewViewStudents = findViewById(R.id.textViewViewStudents);
         editTextName = findViewById(R.id.editTextName);
@@ -45,15 +46,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.buttonAddStudent).setOnClickListener(this);
         textViewViewStudents.setOnClickListener(this);
 
-        createStudentsTable();
+
 
 
     }
 
-    private void createStudentsTable() {
-        mDatabase.execSQL("CREATE TABLE IF NOT EXISTS students (\n" + "    id INTEGER NOT NULL CONSTRAINT students_pk PRIMARY KEY AUTOINCREMENT,\n" + "    name varchar(200) NOT NULL,\n" + "    department varchar(200) NOT NULL,\n" + "    joiningdate datetime NOT NULL,\n" + "    roll INTEGER NOT NULL\n" + ");"
-        );
-    }
 
     private boolean inputsAreCorrect(String name, String roll) {
         if (name.isEmpty()) {
@@ -84,12 +81,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //validating the inptus
         if (inputsAreCorrect(name, roll)) {
 
-            String insertSQL = "INSERT INTO students \n" + "(name, department, joiningdate, roll)\n" + "VALUES \n" + "(?, ?, ?, ?);";
-
-
-            mDatabase.execSQL(insertSQL, new String[]{name, dept, joiningDate, roll});
-
-            Toast.makeText(this, "Student Added Successfully", Toast.LENGTH_SHORT).show();
+            if (mDatabase.addStudent(name, dept, joiningDate,roll))
+                Toast.makeText(this, "Student Added", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(this, "Could not add Student", Toast.LENGTH_SHORT).show();
         }
     }
 
