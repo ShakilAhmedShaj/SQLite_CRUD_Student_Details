@@ -103,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.textViewViewStudents:
+
+                startActivity(new Intent(this, StudentActivity.class));
                 
                 break;
         }
